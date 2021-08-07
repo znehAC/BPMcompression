@@ -229,9 +229,9 @@ def decompressImage(filename, out_filename):
     image.save(out_filename)
 
 if __name__ == "__main__":
-    original_file = "DesertGray.bmp"
-    compressed_file = "DesertGray_c.file"
-    decompressed_file = "DesertGray_d.bmp"
+    original_file = "lena512.bmp"
+    compressed_file = "lena512.file"
+    decompressed_file = "lena512_d.bmp"
 
 
     compressImage(original_file, compressed_file)
