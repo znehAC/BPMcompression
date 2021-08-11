@@ -1,8 +1,9 @@
 from numpy.core.defchararray import index
 import BitUtil as bitu
 import numpy as np
-import math
-import cv2
+from math import sqrt, cos, pi, floor
+from cv2 import imread, imwrite
+
 from numpy.core.fromnumeric import shape
 
 # Matriz de quantizacao
@@ -18,9 +19,9 @@ QUANT_MATRIX = [[16, 11, 10, 16, 24, 40, 51, 61],
 # funcao para gerar valor da matriz DCT
 def getTransformValue(i, j):
     if i == 0:
-        return 1/math.sqrt(8)
+        return 1/sqrt(8)
     else:
-        return (1/2)*math.cos(((2*j+1)*i*math.pi)/16)
+        return (1/2)*cos(((2*j+1)*i*pi)/16)
 
 # funcao que gera a matriz DCT
 def generateTransformMatrix():
@@ -61,7 +62,7 @@ def zigzag(m):
                 currentY += 1
                 currentX -= 1
 
-        if i < math.floor(n/2) : # caso esteja em menos da metade das diagonais
+        if i < floor(n/2) : # caso esteja em menos da metade das diagonais
             if direction == 1: # o proximo numero eh o da direita
                 currentX += 1
                 direction = -1 # direcao vai ser pra baixo
@@ -83,7 +84,7 @@ def reverseZigzag(zz):
     count = 1 # numero de elementos em uma diagonal
     arrayPosition = 0 # posicao do array
     direction = -1
-    size = int(math.sqrt(len(zz))) # obtem o tamanho da matriz
+    size = int(sqrt(len(zz))) # obtem o tamanho da matriz
     result = np.zeros((size, size))
     currentX = 0
     currentY = 0
@@ -101,7 +102,7 @@ def reverseZigzag(zz):
                 currentY += 1
                 currentX -= 1
 
-        if i < math.floor(n/2) :
+        if i < floor(n/2) :
             if direction == 1:
                 currentX += 1
                 direction = -1
@@ -213,7 +214,7 @@ def decode_pixels(hw, stream):
     return nimg
 
 def compressImage(filename, out_filename):
-    img = cv2.imread(filename, 0) # aqui eh utilizado o opencv para ler a imagem em uma matriz
+    img = imread(filename, 0) # aqui eh utilizado o opencv para ler a imagem em uma matriz
     
     height, width = img.shape[:2]
 
@@ -250,5 +251,5 @@ def decompressImage(filename, out_filename):
     img = decode_pixels([height, width], stream)
     stream.flush()
 
-    cv2.imwrite(out_filename, img) # opencv utilizado para escrever a matriz que representa a imagem
+    imwrite(out_filename, img) # opencv utilizado para escrever a matriz que representa a imagem
     

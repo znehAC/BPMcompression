@@ -1,6 +1,7 @@
 import huffman as huff
 import dct
-import sys
+from sys import argv
+from time import time
 
 HUFF = 'huff'
 DCT = 'dct'
@@ -9,9 +10,9 @@ COD = 'cod'
 
 MESSAGES = {
      0: '',
-    -1: '\nArgumentos insuficientes ou inválidos.\n',
-    -2: '\nMétodo inserido inválido.\n',
-    -3: '\nOpção inserida inválida.\n'
+    -1: '\nArgumentos insuficientes ou inválidos.',
+    -2: '\nMétodo inserido inválido.',
+    -3: '\nOpção inserida inválida.'
 }
 
 def checkArguments(args):
@@ -55,18 +56,35 @@ def getOperation(metOp):
 
 def start(type, input, output):
     operation = getOperation(type)
-    
+    start_time = time()
     if operation == 2:
+        print(f'\nDescomprimindo o arquivo {input} ao arquivo {output}')
+        print('\nMétodo: Huffman')
+
         huff.decompressImage(input, output)
+
     elif operation == 3:
+        print(f'\Comprimindo o arquivo {input} ao arquivo {output}')
+        print('\nMétodo: Huffman')
+
         huff.compressImage(input, output)
+
     elif operation == 4:
+        print(f'\nDescomprimindo o arquivo {input} ao arquivo {output}')
+        print('\nMétodo: DCT')
+
         dct.decompressImage(input, output)
+
     elif operation == 5:
+        print(f'\Comprimindo o arquivo {input} ao arquivo {output}')
+        print('\nMétodo: DCT')
+
         dct.compressImage(input, output)
 
+    print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
+
 def main():
-    args = sys.argv[1:]
+    args = argv[1:]
     if validateInput(args):
         start(args[2:], args[0], args[1])
         
