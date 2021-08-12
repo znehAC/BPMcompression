@@ -7,7 +7,7 @@
 </h3>
 
 <h3 align="center">
-  Link da apresentação: <a href="https://drive.google.com/file/d/1OZj8YKfZMbjwICJAVYQjzWL43IhcLZ9v/view?usp=sharing">Vídeo de Apresentação</a>
+  Link da apresentação: <a href="https://drive.google.com/file/d/1v2q-kkKjV8UBcrlN9kea3_yhdBTq5JEL/view?usp=sharing">Vídeo de Apresentação</a>
 </h3>
 
 <p align="center">
