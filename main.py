@@ -63,25 +63,25 @@ def start(type, input, output):
 
         huff.decompressImage(input, output)
 
+        print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
     elif operation == 3:
-        print(f'\Comprimindo o arquivo {input} ao arquivo {output}')
+        print(f'\nComprimindo o arquivo {input} ao arquivo {output}')
         print('\nMétodo: Huffman')
 
         huff.compressImage(input, output)
-
+        print(f'\nCompressão terminada, tempo: {time()-start_time}\n')
     elif operation == 4:
         print(f'\nDescomprimindo o arquivo {input} ao arquivo {output}')
         print('\nMétodo: DCT')
 
         dct.decompressImage(input, output)
-
+        print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
     elif operation == 5:
-        print(f'\Comprimindo o arquivo {input} ao arquivo {output}')
+        print(f'\nComprimindo o arquivo {input} ao arquivo {output}')
         print('\nMétodo: DCT')
 
         dct.compressImage(input, output)
-
-    print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
+        print(f'\nCompressão terminada, tempo: {time()-start_time}\n')
 
 def main():
     args = argv[1:]

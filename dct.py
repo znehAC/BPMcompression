@@ -169,6 +169,7 @@ def encode_pixels(img, hw, stream):
 
     for i in range(0, height, 8):
         for j in range(0, width, 8):
+            
             block = img[i:i+8, j:j+8]                       # bloco com o tamanho 8x8
             dct = applyDCT(m, mt, block)                    # aplica o dct na matriz
             block = np.around(np.divide(dct, QUANT_MATRIX)) # aplica quantizacao 
