@@ -6,6 +6,10 @@
   Alunos: Adriano César | Daniel Vitor
 </h3>
 
+<h3 align="center">
+  Link da apresentação: https://drive.google.com/file/d/1OZj8YKfZMbjwICJAVYQjzWL43IhcLZ9v/view?usp=sharing
+</h3>
+
 <p align="center">
   <a href="#rocket-passo-á-passo">Passo á Passo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-compressão-e-descompressão">Compressão e Descompressão</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
