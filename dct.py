@@ -152,8 +152,7 @@ def reverseRLE(array):
 def convertToByteArray(a):
     result = []
     for i in range(len(a)):
-        if a[i] < 0: # caso o numero seja negativo converte ele para escrever
-            a[i] = a[i]*-1
+        a[i] = np.uint8(a[i])
         result.append(bitu.pad_bits(bitu.to_binary_list(a[i]), 8)) # adiciona o numero em 8 bits
     return result
 
@@ -186,10 +185,12 @@ def decode_block(stream):
     sequence = []
 
     numberCount = bitu.from_binary_list(stream.read_bits(8)) # pega o numero de elementos nao zeros
+    numberCount = np.int8(numberCount)
     sequence.append(numberCount)
 
     for i in range(numberCount): # le todos os elementos nao zeros
         number = bitu.from_binary_list(stream.read_bits(8))
+        number = np.int8(number)
         sequence.append(number)
 
     zeroCount = bitu.from_binary_list(stream.read_bits(8))
