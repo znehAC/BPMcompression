@@ -7,12 +7,12 @@
 </h3>
 
 <h3 align="center">
-  Link da apresentação: https://drive.google.com/file/d/1OZj8YKfZMbjwICJAVYQjzWL43IhcLZ9v/view?usp=sharing
+  Link da apresentação: <a href="https://drive.google.com/file/d/1v2q-kkKjV8UBcrlN9kea3_yhdBTq5JEL/view?usp=sharing">Vídeo de Apresentação</a>
 </h3>
 
 <p align="center">
   <a href="#rocket-passo-á-passo">Passo á Passo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-compressão-e-descompressão">Compressão e Descompressão</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-introçoes">Introduções</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </p>
 
 <br>
@@ -40,21 +40,25 @@
   3. É feito o Encoding da imagem e o bitstream é escrito em um arquivo.
   4. To be continued...
 
-## 💻 Compressão e Descompressão
+## 💻 Intruções
 
-Para a compresão de **Huffman**:
-
-```bash
-Arquivo de Entrada: lena512.bmp
-Arquivo comprimido: lena512.file
-Arquivo descomprimido: lena512_d.bmp
-```
-
-Para a compresão **DCT**:
+Para a execução do programa:
 
 ```bash
-Arquivo de Entrada: lena512.bmp
-Arquivo de Saída: teste.bmp
+Baixar a code nas releases e seguir o passo á passo a seguir:
+
+./codec <entrada> <saída> <método> <opção> 
+
+<entrada> caminho da imagem a ser comprimida/descomprimida
+<saída> caminho da imagem/arquivo que será criada
+
+<método> huff para Huffman, dct para DCT
+<opção> cod ou dec, cod para codificar e dec para decodificar. 
+
+Exemplo: 
+./codec imagem.bmp imagem.huff huff cod 
+
+./codec imagem.huff imagem.bmp huff dec 
 ```
 
 ---
