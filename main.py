@@ -54,33 +54,35 @@ def getOperation(metOp):
         code += 2
     return code
 
-def start(type, input, output):
-    operation = getOperation(type)
+def start(opType, imageInput, output):
+    operation = getOperation(opType)
     start_time = time()
     if operation == 2:
-        print(f'\nDescomprimindo o arquivo {input} ao arquivo {output}')
+        print(f'\nDescomprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: Huffman')
 
-        huff.decompressImage(input, output)
+        huff.decompressImage(imageInput, output)
 
         print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
     elif operation == 3:
-        print(f'\nComprimindo o arquivo {input} ao arquivo {output}')
+        print(f'\nComprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: Huffman')
 
-        huff.compressImage(input, output)
+        huff.compressImage(imageInput, output)
         print(f'\nCompressão terminada, tempo: {time()-start_time}\n')
     elif operation == 4:
-        print(f'\nDescomprimindo o arquivo {input} ao arquivo {output}')
+        print(f'\nDescomprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: DCT')
 
-        dct.decompressImage(input, output)
+        dct.decompressImage(imageInput, output)
         print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
     elif operation == 5:
-        print(f'\nComprimindo o arquivo {input} ao arquivo {output}')
+        quality = int(input('\nInsira o nivel de qualidade que gostaria na imagem (4 - 9)\n=> '))
+        start_time = time()
+        print(f'\nComprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: DCT')
 
-        dct.compressImage(input, output)
+        dct.compressImage(imageInput, output, quality)
         print(f'\nCompressão terminada, tempo: {time()-start_time}\n')
 
 def main():

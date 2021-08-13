@@ -7,14 +7,23 @@ from cv2 import imread, imwrite
 from numpy.core.fromnumeric import shape
 
 # Matriz de quantizacao
-QUANT_MATRIX = [[16, 11, 10, 16, 24, 40, 51, 61],
-              [12, 12, 14, 19, 26, 58, 60, 55],
-              [14, 13, 16, 24, 40, 57, 69, 56],
-              [14, 17, 22, 29, 51, 87, 80, 62],
-              [18, 22, 37, 56, 68, 109, 103, 77],
-              [24, 35, 55, 64, 81, 104, 113, 92],
-              [49, 64, 78, 87, 103, 121, 120, 101],
-              [72, 92, 95, 98, 112, 100, 103, 99]]
+QUANT_MATRIX = [[3, 2, 2, 3, 5, 8, 10, 12],
+                [2, 2, 3, 4, 5, 12, 12, 11 ],
+                [3, 3, 3, 5, 8, 11, 14, 11 ],
+                [3, 3, 4, 6, 10, 17, 16, 12 ],
+                [4, 4, 7, 11, 14, 22, 21, 15 ],
+                [5, 7, 11, 13, 16, 21, 23, 18 ],
+                [10, 13, 16, 17, 21, 24, 24, 20 ],
+                [14, 18, 19, 20, 22, 20, 21, 20 ]]
+
+
+def getQuantMatrix(quality):
+    quality = (13-quality)+1 # aumenta o numero final em 4, pois valores abaixo de 5 geram artefatos
+    qt = np.zeros((8,8))
+    for i in range(len(QUANT_MATRIX[0])):
+        for j in range(len(QUANT_MATRIX[0])):
+            qt[i][j] = QUANT_MATRIX[i][j] * quality
+    return qt
 
 # funcao para gerar valor da matriz DCT
 def getTransformValue(i, j):
@@ -161,9 +170,10 @@ def encode_block(block):
     rle = rLEncode(zz)
     return rle
 
-def encode_pixels(img, hw, stream):
+def encode_pixels(img, hw, stream, quality):
     m = generateTransformMatrix()
     mt = np.transpose(m)
+    qm = getQuantMatrix(quality)
     height, width = hw
 
     for i in range(0, height, 8):
@@ -171,7 +181,7 @@ def encode_pixels(img, hw, stream):
             
             block = img[i:i+8, j:j+8]                       # bloco com o tamanho 8x8
             dct = applyDCT(m, mt, block)                    # aplica o dct na matriz
-            block = np.around(np.divide(dct, QUANT_MATRIX)) # aplica quantizacao 
+            block = np.around(np.divide(dct, qm)) # aplica quantizacao 
             eBlock = encode_block(block)                    # performa o zigzag+rle no bloco
             bytes = convertToByteArray(eBlock)              # converto o array de ints em um array com 8 bits cada numero
 
@@ -200,22 +210,23 @@ def decode_block(stream):
     block = reverseZigzag(block)
     return block
 
-def decode_pixels(hw, stream):
+def decode_pixels(hw, stream, quality):
     m = generateTransformMatrix()
     mt = np.transpose(m)
+    qt = getQuantMatrix(quality)
     height, width = hw
     nimg = np.zeros((height, width)) # matriz que representara a imagem
 
     for i in range(0, height, 8):
         for j in range(0, width, 8):
             block = decode_block(stream)
-            idct = inverseDCT(QUANT_MATRIX, m, mt, block)
+            idct = inverseDCT(qt, m, mt, block)
 
             block = np.uint8(np.around(idct))
             nimg[i:i+8, j:j+8] = block
     return nimg
 
-def compressImage(filename, out_filename):
+def compressImage(filename, out_filename, quality):
     img = imread(filename, 0) # aqui eh utilizado o opencv para ler a imagem em uma matriz
     
     height, width = img.shape[:2]
@@ -225,13 +236,16 @@ def compressImage(filename, out_filename):
 
     header = bits[:54*8]
     header = list(header)
+    q_header = bitu.pad_bits(bitu.to_binary_list(quality), 8)
+    header += q_header
 
+    
     stream = bitu.OutputBitStream(out_filename)
 
     encode_header(header, stream)
     stream.flush()
 
-    encode_pixels(img, [height, width], stream)
+    encode_pixels(img, [height, width], stream, quality)
     stream.close()
     
 def decompressImage(filename, out_filename):
@@ -249,9 +263,15 @@ def decompressImage(filename, out_filename):
     stream = bitu.InputBitStream(filename)
 
     header = stream.read_bits(54*8)
+    quality = stream.read_bits(8)
+    quality = bitu.from_binary_list(quality)
+  
+    
     stream.flush()
-    img = decode_pixels([height, width], stream)
+    img = decode_pixels([height, width], stream, quality)
     stream.flush()
 
     imwrite(out_filename, img) # opencv utilizado para escrever a matriz que representa a imagem
     
+
+
