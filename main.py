@@ -63,27 +63,29 @@ def start(opType, imageInput, output):
 
         huff.decompressImage(imageInput, output)
 
-        print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
+        print(f'\nDescompressão terminada, tempo de execução: {time()-start_time}\n')
     elif operation == 3:
         print(f'\nComprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: Huffman')
 
         huff.compressImage(imageInput, output)
-        print(f'\nCompressão terminada, tempo: {time()-start_time}\n')
+        print(f'\nCompressão terminada, tempo de execução: {time()-start_time}\n')
+        
     elif operation == 4:
         print(f'\nDescomprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: DCT')
 
         dct.decompressImage(imageInput, output)
-        print(f'\nDescompressão terminada, tempo: {time()-start_time}\n')
+        print(f'\nDescompressão terminada, temp de execução: {time()-start_time}\n')
     elif operation == 5:
         quality = int(input('\nInsira o nivel de qualidade que gostaria na imagem (4 - 9)\n=> '))
         start_time = time()
         print(f'\nComprimindo o arquivo {imageInput} ao arquivo {output}')
         print('\nMétodo: DCT')
 
-        dct.compressImage(imageInput, output, quality)
-        print(f'\nCompressão terminada, tempo: {time()-start_time}\n')
+        mse, psnr = dct.compressImage(imageInput, output, quality)
+        print(f'\nCompressão terminada, tempo de execução: {time()-start_time}')
+        print(f'MSE: {mse}\PSNR: {psnr}\n')
 
 def main():
     args = argv[1:]

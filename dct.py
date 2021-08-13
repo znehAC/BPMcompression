@@ -1,7 +1,7 @@
 from numpy.core.defchararray import index
 import BitUtil as bitu
 import numpy as np
-from math import sqrt, cos, pi, floor
+from math import sqrt, cos, pi, floor, pow
 from cv2 import imread, imwrite
 
 from numpy.core.fromnumeric import shape
@@ -46,10 +46,11 @@ def applyDCT(m, mt, block):
 
 # inverte a transformacao e quantizacao no bloco
 def inverseDCT(qm, m, mt, block):
+    x = np.zeros((shape(block)[0], shape(block)[1]))
     for i in range(8):
         for j in range(8):
-            block[i, j] = np.round(block[i, j]*qm[i][j]) # reverte a quantizacao
-    return np.matmul(np.matmul(mt, block), m) # MTxGxM
+            x[i, j] = np.round(block[i, j]*qm[i][j]) # reverte a quantizacao
+    return np.matmul(np.matmul(mt, x), m) # MTxGxM
 
 
 def zigzag(m):
@@ -170,23 +171,37 @@ def encode_block(block):
     rle = rLEncode(zz)
     return rle
 
+# get the squared error sum of matrix X and Y
+def getBlockSE(x, y):
+    sum = 0
+    for i in range(8):
+        for j in range(8):
+            sum += (x[i, j] - y[i, j])*(x[i, j] - y[i, j])
+    return sum
+
 def encode_pixels(img, hw, stream, quality):
     m = generateTransformMatrix()
     mt = np.transpose(m)
     qm = getQuantMatrix(quality)
     height, width = hw
-
+    seSum = 0
     for i in range(0, height, 8):
         for j in range(0, width, 8):
             
             block = img[i:i+8, j:j+8]                       # bloco com o tamanho 8x8
             dct = applyDCT(m, mt, block)                    # aplica o dct na matriz
-            block = np.around(np.divide(dct, qm)) # aplica quantizacao 
-            eBlock = encode_block(block)                    # performa o zigzag+rle no bloco
+            dct = np.around(np.divide(dct, qm))             # aplica quantizacao 
+            idct = inverseDCT(qm, m, mt, dct)
+            seSum += getBlockSE(block, idct)
+            eBlock = encode_block(dct)                      # performa o zigzag+rle no bloco
             bytes = convertToByteArray(eBlock)              # converto o array de ints em um array com 8 bits cada numero
 
             for byte in bytes:
                 stream.write_bits(byte)
+    
+    mse = seSum/(height*width)
+    psnr = 255/mse
+    return [mse, psnr]
 
 def encode_header(header, stream):
     stream.write_bits(header)
@@ -245,8 +260,10 @@ def compressImage(filename, out_filename, quality):
     encode_header(header, stream)
     stream.flush()
 
-    encode_pixels(img, [height, width], stream, quality)
+    mse, psnr = encode_pixels(img, [height, width], stream, quality)
     stream.close()
+    
+    return [mse, psnr]
     
 def decompressImage(filename, out_filename):
     bytes_array = np.fromfile(filename, dtype = "uint8")
@@ -275,3 +292,9 @@ def decompressImage(filename, out_filename):
     
 
 
+def main():
+    compressImage('lena512.bmp', 'lena512.dct', 4)
+    decompressImage('lena512.dct', 'lena512d.bmp')
+        
+if __name__ == '__main__':
+    main()
