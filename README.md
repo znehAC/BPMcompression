@@ -6,10 +6,6 @@
   Alunos: Adriano César | Daniel Vitor
 </h3>
 
-<h3 align="center">
-  Link da apresentação: <a href="https://drive.google.com/file/d/1v2q-kkKjV8UBcrlN9kea3_yhdBTq5JEL/view?usp=sharing">Vídeo de Apresentação</a>
-</h3>
-
 <p align="center">
   <a href="#rocket-passo-á-passo">Passo á Passo</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-introçoes">Introduções</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
